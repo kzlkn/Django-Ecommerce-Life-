@@ -1,0 +1,100 @@
+{% include "shops/bar.html" %}
+{% load static %}
+<!-- 
+    Note:  This html  using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI(with AI formated).
+    Bootstrap: https://getbootstrap.com/
+    Bootswatch Cosmo theme: https://bootswatch.com/5/cosmo/
+    FontAwesome: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        /* Global styles for the entire page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            height: 69vh;
+            margin: 0;
+        }
+
+        /* Styles specific to the login form */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 50%;
+        }
+
+        .basic-form {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .basic-form h2 {
+            margin-bottom: 40px;
+            color: #333;
+            text-align: center;
+        }
+
+        .basic-form .form-group {
+            margin-bottom: 15px;
+        }
+
+        .basic-form .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }
+
+        .basic-form .btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .basic-form .btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <div class="basic-form">
+            <h2>Login</h2>
+            <form method="post" class="form-horizontal">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="form-group text-center">
+                    <button type="submit" class="btn">Login</button>
+                </div>
+
+                <div class="text-center">
+
+                    <a href="{% url 'kayit' %}"> Don't have an account? </a>
+
+
+                    <br> <br>
+
+                    <a href="{% url 'reset_password' %}"> Forgotten your password? </a>
+
+
+            </form>
+        </div>
+    </div>
+</body>
+</html>

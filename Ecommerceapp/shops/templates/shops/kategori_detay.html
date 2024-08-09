@@ -1,0 +1,164 @@
+{% extends "./bar.html" %}
+{% load static %}
+{% load custom_filters %}
+
+<!-- 
+    Note:  This html  using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI(with AI formated).
+    Bootstrap: https://getbootstrap.com/
+    Bootswatch Cosmo theme: https://bootswatch.com/5/cosmo/
+    FontAwesome: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
+    source for Udemy tutoriel  :https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022
+-->
+
+
+{% block content %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+<!-- Css dosyasını buraya yaz kütüohane gibi bak  -->
+
+
+<style>
+  /* Category filter styling */
+  .category-filter {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+
+  .category-filter h3 {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .category-filter .list-group-item {
+    padding: 8px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+  }
+
+  .category-filter .list-group-item a {
+    text-decoration: none;
+    color: #333;
+    transition: color 0.3s;
+  }
+
+  .category-filter .list-group-item a:hover {
+    color: #007bff;
+  }
+
+  /* Product card styling */
+  .product-card {
+    transition: transform 0.3s ease;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .product-card .card-img-top {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin: auto;
+  }
+
+  .product-card .card-body {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .product-card .card-text {
+    font-size: 0.9rem;
+    color: #666666;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+  }
+
+  .product-card .card-price {
+    font-size: 1.5rem;
+    color: #28a745;
+    font-weight: bold;
+  }
+
+  .product-card .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    font-size: 0.9rem;
+    align-self: flex-end;
+  }
+
+  .product-card .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+</style>
+<!-- detay nasıl olacak diye ayarlamalar -->
+<div class="row">
+    <div class="col-md-3">
+        <div class="category-filter">
+            <h3>Filter by Category</h3>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <a href="{% url 'shops' %}">All</a>
+                </li>
+                {% for category in tum_UrunKategorisi %}
+                    <li class="list-group-item">
+                        <a href="{{ category.get_absolute_url }}">{{ category.etiket|capfirst }}</a>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No categories found</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="product-details">
+            <h1>{{ urun_kategorisi.etiket }}</h1>
+            <p>{{ urun_kategorisi.aciklama }}</p>
+            <div class="row">
+                {% for product in urunler %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card product-card">
+                            <img class="card-img-top" src="{{ product.urun_resmi.url }}" alt="{{ product.urun_adi }}">
+                            <div class="card-body">
+                                <a href="{{ product.get_absolute_url }}">
+                                    <h5 class="card-title">{{ product.urun_adi|capfirst }}</h5>
+                                </a>
+                                <p class="card-text">{{ product.urun_tanimi|first_two_sentences }}</p>
+                                <p class="card-price">${{ product.fiyat }}</p>
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Product</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="col-md-12">
+                        <p>No products found in this category.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "./bar.html" %}
+{% load static %}
+
+
+
+<!-- 
+    Note:  This html  using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI(with AI formated).
+    Bootstrap: https://getbootstrap.com/
+    Bootswatch Cosmo theme: https://bootswatch.com/5/cosmo/
+    FontAwesome: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
+-->
+
+
+
+
+{% block content %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+
+
+
+    <!-- CSS Html içinde olsun -->
+    <style>
+      /* Product card styling */
+      .product-card {
+        transition: transform 0.3s ease;
+        border: 1px solid #e1e1e1;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .product-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .product-card .card-img-top {
+        max-width: 100%;
+        max-height: 300px;
+        object-fit: contain;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        margin: auto;
+      }
+
+      .product-card .card-body {
+        padding: 1.5rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .product-card .card-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .product-card .card-text {
+        font-size: 0.9rem;
+        color: #666666;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+      }
+
+      .product-card .card-price {
+        font-size: 1.5rem;
+        color: #28a745;
+        font-weight: bold;
+      }
+
+      .product-card .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        font-size: 0.9rem;
+        align-self: flex-end;
+      }
+
+      .product-card .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+    </style>
+
+
+
+
+
+    <!-- sua funtion onemli  -->
+    <div class="container mt-5">
+
+
+       <!-- query değişkeni armamda ekrana yazılır  -->
+        <h1>Search Results for "{{ query }}"</h1>
+        <hr>
+        {% if results %}
+            <div class="row">
+                {% for product in results %}
+                    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                        <div class="card product-card">
+                            <img class="card-img-top" src="{{ product.urun_resmi.url }}" alt="{{ product.urun_adi }}">
+                            <div class="card-body">
+                                <a href="{{ product.get_absolute_url }}">
+                                    <h5 class="card-title">{{ product.urun_adi }}</h5>
+                                </a>
+                                <p class="card-text">{{ product.urun_tanimi|truncatewords:20 }}</p>
+                                <p class="card-price">${{ product.fiyat }}</p>
+                                <a href="{{ product.get_absolute_url }}" class="btn btn-primary">View Product</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No results found.</p>
+        {% endif %}
+    </div>
+{% endblock %}

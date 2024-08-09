@@ -1,0 +1,232 @@
+{% include "shops/bar.html" %}
+
+{% load static %}
+{% load mathfilters %}
+
+{% block content %}
+<!-- 
+    Note:  This html  using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI(with AI formated).
+    Bootstrap: https://getbootstrap.com/
+    Bootswatch Cosmo theme: https://bootswatch.com/5/cosmo/
+    FontAwesome: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
+    // develop with help Udemy Tutorial :https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022/
+-->
+<style>
+    /* Custom CSS for the shopping cart page */
+    main {
+        padding-top: rem;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 1 1rem;
+    }
+
+    .product-item {
+        display: flex;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        background-color: #f8f9fa;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: box-shadow 0.3s ease;
+        align-items: center;
+    }
+
+    .product-item:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-item img {
+        max-width: 100px;
+        border-radius: 5px;
+        margin-right: 1rem;
+    }
+
+    .product-details {
+        flex-grow: 1;
+    }
+
+    .product-details h1 {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    .product-details p {
+        margin: 0;
+        color: #6c757d;
+    }
+
+    .product-actions {
+        text-align: right;
+    }
+
+    .product-actions .form-select {
+        margin-bottom: 0.5rem;
+        display: inline-block;
+        width: auto;
+    }
+
+    .product-actions .btn {
+        font-size: 0.9rem;
+    }
+
+    .product-actions .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .product-actions .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .product-actions .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .product-actions .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+    .subtotal {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #28a745;
+        text-align: right;
+    }
+
+    .pay-container {
+        position: sticky;
+        bottom: 0;
+        background: #fff;
+        padding: 1rem 0;
+        text-align: center;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .btn-pay {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+    }
+
+    .btn-pay:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+</style>
+
+<main>
+    <div class="container">
+        <h1 class="h5">Shopping Cart</h1>
+        <hr>
+
+        {% for item in sepet_items %}
+            {% with urun=item.product %}
+            <div class="product-item">
+                <img alt="{{ urun.urun_adi }}" src="{{ urun.urun_resmi.url }}"> 
+
+                <div class="product-details">
+                    <a href="{{ urun.get_absolute_url }}" class="text-decoration-none text-reset"> 
+                        <h1 class="h5">{{ urun.urun_adi }}</h1>
+                    </a>
+                    <p>Price: ${{ item.price }} x {{ item.miktar }}</p>
+                    <p>Total: ${{ item.price | mul:item.miktar }}</p>
+                </div>
+
+                <div class="product-actions">
+                    <label for="select{{ urun.id }}">Qty</label>
+                    <select id="select{{ urun.id }}" class="form-select form-select-sm">
+                        <option value="1" {% if item.miktar == 1 %}selected{% endif %}>1</option>
+                        <option value="2" {% if item.miktar == 2 %}selected{% endif %}>2</option>
+                        <option value="3" {% if item.miktar == 3 %}selected{% endif %}>3</option>
+                        <option value="4" {% if item.miktar == 4 %}selected{% endif %}>4</option>
+                    </select>
+                    <button type="button" data-index="{{ urun.id }}" class="btn btn-primary btn-sm update-button">Update</button>
+                    <button type="button" data-index="{{ urun.id }}" class="btn btn-danger btn-sm delete-button">Delete</button>
+                </div>
+            </div>
+            {% endwith %}
+        {% endfor %}
+
+        <div class="subtotal">
+            Subtotal: $<span id="hepsi">{{ total_amount }}</span>
+        </div>
+    </div>
+
+    <div class="pay-container">
+        <button type="button" class="btn btn-pay">Pay Now</button>
+    </div>
+</main>
+
+
+
+
+
+<script>
+
+// develop with help Udemy Tutorial :https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022/
+    $(document).on('click', '.delete-button', function(e){ // delete-buton isimli tıklamada dinleyici tanımlanır 
+        e.preventDefault();  //tıklama olaynın varsayılan davranısşı engeller mesela sayfayı yeniden yüklemek gibi 
+        var urunid = $(this).data('index'); //tıklanan elementin data-index özniteliğini alır ve urunid değişkenine atar.
+
+        $.ajax({ // ajax istegi başlar
+            type: 'POST', // isteğin türe belirlenir
+            url: '{% url "sepet-sil" %}',// url gidecegi yer belirlenir
+            data: { // gönderilecek veriler beirlenir
+                urun_detay_id: urunid,
+                //csrfmiddlewaretoken: "{{ csrf_token }}", buraya dikkata 
+                action: 'post'
+            },
+            success: function(json){ // başarılı oldugunda çalıştırılacak funksiyonlar
+                location.reload(true); 
+                document.getElementById("sepet-miktar").textContent = json.miktar; // güncelleme 
+                document.getElementById("hepsi").textContent = json.hepsi; // ncelleme 
+            },
+            error: function(xhr, errmsg, err){// eror olduğunda çalışacak funksiyonlar
+                alert("An error occurred: " + xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+    $(document).on('click', '.update-button', function(e){  // dinleyici anımanır
+        e.preventDefault();//tıklama olaynın varsayılan davranısşı engeller mesela sayfayı yeniden yüklemek gibi 
+        var urunid = $(this).data('index'); //tıklanan elementin data index özniteliginden alınır 
+        var secilen_miktar = $('#select' + urunid + ' option:selected').text(); // #select + urunid elementinin seçili olan seçeneğinin metin değerini alır.
+    
+        $.ajax({
+            type: 'POST', //POST' isteğin türünü belirtir.
+            url: '{% url "sepet-guncelle" %}', //isteğin gönderileceği URL'yi belirtir.
+            data: { //ısmında gönderilecek veriler tanımlanır: ürün detay ID'si, seçilen miktar, CSRF tokeni ve eylem türü.
+                urun_detay_id: urunid,
+                urun_miktar: secilen_miktar,
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                action: 'post'
+            },
+            success: function(json){// başarılı oldugunda çalıştırılacak funksiyonlar
+                location.reload(true); 
+                $('#select' + urunid).val(json.mktr);
+                $('#hepsi').text(json.hepsi);
+                
+            },
+            error: function(xhr, errmsg, err){// eror olduğunda çalışacak funksiyonlar
+                alert("An error occurred: " + xhr.status + ": " + xhr.responseText);
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-pay', function(e){ //.btn-pay sınıfına sahip bir elemente tıklandığında çalışacak bir olay dinleyici tanımlar.
+        e.preventDefault(); // varsayılan davranışını engeller.
+        window.location.href = "{% url 'odeme' %}"; //Kullanıcıyı ödeme sayfasına yönlendirir.
+    });
+</script>
+
+{% endblock %}

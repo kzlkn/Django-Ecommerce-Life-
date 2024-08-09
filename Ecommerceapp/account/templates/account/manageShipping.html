@@ -1,0 +1,168 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+    Note:  This html  using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI(with AI formated).
+    Bootstrap: https://getbootstrap.com/
+    Bootswatch Cosmo theme: https://bootswatch.com/5/cosmo/
+    FontAwesome: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Shipping</title>
+    <style>
+        /* Basic reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Main content container */
+        .content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Form container styling */
+        .basic-form {
+            background-color: #fff;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 450px;
+            width: 100%;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .basic-form:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .basic-form h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+            color: #333;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .basic-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .basic-form form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .basic-form form .form-group label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .basic-form form .form-group input {
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
+        }
+
+        .basic-form form .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .basic-form form button {
+            padding: 12px 20px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .basic-form form button:hover {
+            background-color: #0056b3;
+        }
+
+        .basic-form form button:active {
+            background-color: #004494;
+        }
+
+        /* Footer styling */
+        .footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .basic-form {
+                padding: 30px 20px;
+            }
+
+            .basic-form h2 {
+                font-size: 24px;
+            }
+
+            .basic-form form button {
+                font-size: 16px;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    {% include "shops/bar.html" %}
+    <div class="content">
+        <div class="basic-form">
+            <h2>Manage Shipping</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+                
+                
+                
+                
+                
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 Kizilkan. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

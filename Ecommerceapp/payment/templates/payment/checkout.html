@@ -1,0 +1,127 @@
+{% include "shops/bar.html" %}
+{% load static %}
+{% block content %}
+<!-- 
+    Note:  This html  using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI(with AI formated).
+    Bootstrap: https://getbootstrap.com/
+    Bootswatch Cosmo theme: https://bootswatch.com/5/cosmo/
+    FontAwesome: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
+    Udemy tutoriel  :https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022
+    https://developer.paypal.com/integration-builder/
+-->
+<body>
+    <br>
+    <div class="container bg-white shadow-md p-5" style="width:500px; border-radius:20px;">
+        <form id="form" onsubmit="event.preventDefault();">
+            <div>
+                <h3> <i class="fa fa-chevron-circle-right" aria-hidden="true"></i> &nbsp; Complete your order </h3>
+                <p> Please enter in the relevant information below. </p>
+                <hr>
+                <br>
+                <div class="form-field">
+                    <input class="form-control validate" id="name" type="text" placeholder="Full name*" autocomplete="off" value="{{gondermeAdress.name}}" required>
+                </div>
+                <br>
+                <div class="form-field">
+                    <input class="form-control validate" id="email" type="email" placeholder="Email address*" autocomplete="off" value="{{gondermeAdress.email}}" required>
+                </div>
+                <br>
+                <div class="form-field">
+                    <input class="form-control validate" id="address1" type="text" placeholder="Address*" autocomplete="off" value="{{gondermeAdress.adress}}" required>
+                </div>
+                <br>
+                <div class="form-field">
+                    <input class="form-control validate" id="city" type="text" placeholder="City*" autocomplete="off" value="{{gondermeAdress.city}}" required>
+                </div>
+                <br>
+                <div class="form-field">
+                    <input class="form-control" id="zipcode" type="text" placeholder="Zip code (Optional)" autocomplete="off" value="{{gondermeAdress.zip}}">
+                </div>
+            </div>
+            <br>
+            <br>
+            <div id="paypal-button-container"></div>
+            <script src="https://www.paypal.com/sdk/js?client-id=Af_STV6GGqlJdYRKkKGELxLijcz3oo5EaoEFbay_uIoj_7mc7yD6bhCK5X-EgMCugQ7w93LHGU_1xt_I&currency=USD&intent=capture&enable-funding=venmo" data-sdk-integration-source="integrationbuilder"></script>
+        </form>
+    </div>
+    <br>
+</body>
+<script>
+    const allPrice = '{{ sepet.get_total }}';  
+    const paypalButtonsComponent = paypal.Buttons({
+        style: {
+            color: "gold",
+            shape: "rect",
+            layout: "vertical"
+        },
+        onInit: function(data, actions) {
+            actions.disable();
+            document.querySelectorAll('.validate').forEach(item => {
+                item.addEventListener('keyup', () => {
+                    let orderVerified = 'Yes';
+                    function checkInputs() {
+                        document.querySelectorAll('input[required]').forEach(input => {
+                            if (input.value.trim() === '') {
+                                orderVerified = 'No';
+                            }
+                        });
+                        return orderVerified;
+                    }
+                    if (checkInputs() === 'Yes') {
+                        actions.enable();
+                    } else {
+                        actions.disable();
+                    }
+                });
+            });
+            if (checkInputs() === 'Yes') {
+                actions.enable();
+            } else {
+                actions.disable();
+            }
+        },
+        createOrder: (data, actions) => {
+            const createOrderPayload = {
+                purchase_units: [
+                    {
+                        amount: {
+                            value: allPrice
+                        }
+                    }
+                ]
+            };
+            return actions.order.create(createOrderPayload);
+        },
+        onApprove: (data, actions) => {
+            return actions.order.capture().then(details => {
+                const payerName = details.payer.name.given_name;
+                console.log('Transaction completed by ' + payerName);
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "complete_order" %}',
+                    data: {
+                        name: $('#name').val(),
+                        email: $('#email').val(),
+                        adress: $('#address1').val(),
+                        city: $('#city').val(),
+                        zip: $('#zipcode').val(),
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                    },
+                    success: function(json) {
+                        window.location.replace("{% url 'payment_success' %}");
+                    },
+                    error: function(xhr, errmsg, err) {
+                        window.location.replace("{% url 'payment_fail' %}");
+                    }
+                });
+            });
+        },
+        onError: (err) => {
+            console.error('An error prevented the buyer from checking out with PayPal', err);
+        }
+    });
+    paypalButtonsComponent.render("#paypal-button-container").catch((err) => {
+        console.error('PayPal Buttons failed to render', err);
+    });
+</script>
+{% endblock %}
