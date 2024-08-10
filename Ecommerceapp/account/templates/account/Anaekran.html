@@ -15,6 +15,7 @@
 </style>
 
 <body>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <br>
 
     <div class="container bg-white shadow-md p-5 form-layout">
@@ -31,7 +32,7 @@
     <br>
 
     <div class="container bg-white shadow-md p-5 form-layout">
-        <h4><i class="fa fa-list-alt" aria-hidden="true"></i> &nbsp; Order Tracking</h4>
+        <h4><i class="fa fa-list-alt" aria-hidden="true"></i> &nbsp; My Orders </h4>
         <hr>
         <p>View the status and details of all your orders right here.</p>
         <a class="btn btn-primary navbar-btn text-white" type="button" href="{% url 'track'%}">View My Orders</a>
@@ -54,7 +55,7 @@
         <h4><i class="fa fa-chevron-circle-right" aria-hidden="true"></i> &nbsp; Shipping Settings</h4>
         <hr>
         <p>Add or update your shipping address here.</p>
-        <a class="btn btn-primary navbar-btn text-white" type="button" href="{% url 'ManageShipping' %}">Update Shipping</a>
+        <a class="btn btn-primary navbar-btn text-white" type="button" href="{% url 'ManageShipping' %}">Update Information</a>
     </div>
     
 

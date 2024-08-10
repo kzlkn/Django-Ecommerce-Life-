@@ -174,15 +174,21 @@ def rate_product(request): # HTTP POST istegiy başlar .
     
     return JsonResponse({'success': 'Rating submitted successfully'}) # başarı içeren json döndürür
 
-#---------------*************************************
+#---------------********************************i
+
+def imprint_view(request):
+    return render(request, 'shops/imprint.html')
+
+
+def about_us(request):
+    return render(request, 'shops/about_us.html')
+
+def genel_kosullar(request):
+    return render(request, 'shops/genel_kosullar.html')
 
 
 
-
-
-
-
-#from django import template
+#from django import templsd
 
 #register = template.Library()
 

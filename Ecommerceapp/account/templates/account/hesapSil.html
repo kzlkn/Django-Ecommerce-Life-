@@ -1,12 +1,6 @@
-<!-- 
-    Note:  This html  using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI(with AI formated).
-    Bootstrap: https://getbootstrap.com/
-    Bootswatch Cosmo theme: https://bootswatch.com/5/cosmo/
-    FontAwesome: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
--->
-
 <!DOCTYPE html>
 <html lang="en">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,6 +89,19 @@
         .btn-danger:hover {
             background-color: #c82333;
         }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
     </style>
 </head>
 <body>
@@ -112,7 +119,6 @@
             </div>
         {% endif %}
         
-        
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
@@ -125,6 +131,7 @@
             </div>
             <button type="submit" class="btn btn-danger">Delete Account</button>
         </form>
+        <button onclick="window.history.back()" class="btn btn-secondary">Go Back</button>
     </div>
 </body>
 </html>

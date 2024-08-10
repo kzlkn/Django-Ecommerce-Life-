@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <!-- 
@@ -11,6 +12,7 @@
 
 
 <html lang="en">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,11 +117,14 @@
                 <label for="id_email">Email:</label>
                 {{ user_form.email }}
             </div>
+            
             <button type="submit" class="btn btn-primary">Update Profile</button>
+            <button onclick="window.history.back()" class="btn btn-secondary">Go Back</button>
             <div class="text-center">
                 <a href="{% url 'hesapsil' %}" class="btn btn-danger text-white w-100 p-2">Delete Account</a>
             </div>
         </form>
+        
     </div>
 </body>
 </html>
