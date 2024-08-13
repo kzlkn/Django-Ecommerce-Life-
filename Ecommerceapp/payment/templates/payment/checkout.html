@@ -2,20 +2,25 @@
 {% load static %}
 {% block content %}
 <!-- 
-    Note:  This html  using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI(with AI formated).
+    Note:  This html is using Bootstrap, Bootswatch Cosmo theme, FontAwesome, and AI (with AI formatted).
     Bootstrap: https://getbootstrap.com/
     Bootswatch Cosmo theme: https://bootswatch.com/5/cosmo/
     FontAwesome: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css
-    Udemy tutoriel  :https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022
+    Udemy tutorial: https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022
     https://developer.paypal.com/integration-builder/
 -->
 <body>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <br>
     <div class="container bg-white shadow-md p-5" style="width:500px; border-radius:20px;">
         <form id="form" onsubmit="event.preventDefault();">
             <div>
                 <h3> <i class="fa fa-chevron-circle-right" aria-hidden="true"></i> &nbsp; Complete your order </h3>
-                <p> Please enter in the relevant information below. </p>
+                {% if not user.is_authenticated %}
+                <p> Do you want to register? <a href="{% url 'kayit' %}">click here</a> </p>
+                <p> Do you want to Login? <a href="{% url 'custom-login-view' %}">Login</a> </p>
+                <p> Do you want to order as a guest? </p>
+                {% endif %}
                 <hr>
                 <br>
                 <div class="form-field">
