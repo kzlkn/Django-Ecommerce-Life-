@@ -173,8 +173,7 @@
 
 
 <script>
-
-// develop with help Udemy Tutorial :https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022/
+    // develop with help Udemy Tutorial :https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022/
     $(document).on('click', '.delete-button', function(e){ // delete-buton isimli tıklamada dinleyici tanımlanır 
         e.preventDefault();  //tıklama olaynın varsayılan davranısşı engeller mesela sayfayı yeniden yüklemek gibi 
         var urunid = $(this).data('index'); //tıklanan elementin data-index özniteliğini alır ve urunid değişkenine atar.
@@ -184,13 +183,13 @@
             url: '{% url "sepet-sil" %}',// url gidecegi yer belirlenir
             data: { // gönderilecek veriler beirlenir
                 urun_detay_id: urunid,
-                //csrfmiddlewaretoken: "{{ csrf_token }}", buraya dikkata 
+                csrfmiddlewaretoken: "{{ csrf_token }}",  // CSRF token eklenir
                 action: 'post'
             },
             success: function(json){ // başarılı oldugunda çalıştırılacak funksiyonlar
                 location.reload(true); 
-                document.getElementById("sepet-miktar").textContent = json.miktar; // güncelleme 
-                document.getElementById("hepsi").textContent = json.hepsi; // ncelleme 
+                document.getElementById("sepet-miktar").textContent = json.quantity; // güncelleme 
+                document.getElementById("hepsi").textContent = json.total; // güncelleme 
             },
             error: function(xhr, errmsg, err){// eror olduğunda çalışacak funksiyonlar
                 alert("An error occurred: " + xhr.status + ": " + xhr.responseText);
@@ -209,14 +208,13 @@
             data: { //ısmında gönderilecek veriler tanımlanır: ürün detay ID'si, seçilen miktar, CSRF tokeni ve eylem türü.
                 urun_detay_id: urunid,
                 urun_miktar: secilen_miktar,
-                csrfmiddlewaretoken: "{{ csrf_token }}",
+                csrfmiddlewaretoken: "{{ csrf_token }}",  // CSRF token eklenir
                 action: 'post'
             },
             success: function(json){// başarılı oldugunda çalıştırılacak funksiyonlar
                 location.reload(true); 
                 $('#select' + urunid).val(json.mktr);
                 $('#hepsi').text(json.hepsi);
-                
             },
             error: function(xhr, errmsg, err){// eror olduğunda çalışacak funksiyonlar
                 alert("An error occurred: " + xhr.status + ": " + xhr.responseText);
