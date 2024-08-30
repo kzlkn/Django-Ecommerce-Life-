@@ -60,18 +60,26 @@
             layout: "vertical"
         },
         onInit: function(data, actions) {
-            actions.disable();
+            function checkInputs() {
+                let orderVerified = 'Yes';
+                document.querySelectorAll('input[required]').forEach(input => {
+                    if (input.value.trim() === '') {
+                        orderVerified = 'No';
+                    }
+                });
+                return orderVerified;
+            }
+
+            // Run checkInputs once on initialization to check pre-filled data
+            if (checkInputs() === 'Yes') {
+                actions.enable();
+            } else {
+                actions.disable();
+            }
+
+            // Add event listeners to validate inputs as the user types
             document.querySelectorAll('.validate').forEach(item => {
                 item.addEventListener('keyup', () => {
-                    let orderVerified = 'Yes';
-                    function checkInputs() {
-                        document.querySelectorAll('input[required]').forEach(input => {
-                            if (input.value.trim() === '') {
-                                orderVerified = 'No';
-                            }
-                        });
-                        return orderVerified;
-                    }
                     if (checkInputs() === 'Yes') {
                         actions.enable();
                     } else {
@@ -79,11 +87,6 @@
                     }
                 });
             });
-            if (checkInputs() === 'Yes') {
-                actions.enable();
-            } else {
-                actions.disable();
-            }
         },
         createOrder: (data, actions) => {
             const createOrderPayload = {
@@ -129,4 +132,5 @@
         console.error('PayPal Buttons failed to render', err);
     });
 </script>
+
 {% endblock %}
