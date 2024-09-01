@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 
  
-   # Note:  This code develop and  formatted with  AI.
+   # Note:  This code formatted with  AI.
    # with help source :https://docs.djangoproject.com/en/5.0/ref/request-response/
    # https://www.udemy.com/course/python-django-build-an-e-commerce-store-2022/
 
